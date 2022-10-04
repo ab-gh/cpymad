@@ -37,13 +37,13 @@ or directly checkout the source code using git (unstable)::
 
     git clone https://github.com/MethodicalAcceleratorDesign/MAD-X
 
-On Mac, you currently also have to apply the following patch_ to the MAD-X
-source, to make the build work::
+You may also have to install openblas using homebrew, and set the fallback library path::
 
-    curl -L -O https://raw.githubusercontent.com/hibtc/cpymad/master/.github/patch/fix-macos-symbol-not-found-mad_argc.patch
-    patch -d ./MAD-X -p1 <fix-macos-symbol-not-found-mad_argc.patch
+.. code-block:: bash
 
-.. _patch: https://raw.githubusercontent.com/hibtc/cpymad/master/.github/patch/fix-macos-symbol-not-found-mad_argc.patch
+    brew install openblas
+    set -x DYLD_FALLBACK_LIBRARY_PATH /opt/homebrew/opt/openblas/lib
+
 
 We will do an out-of-source build in a ``build/`` subdirectory. This way, you
 can easily delete the ``build`` directory and restart if anything goes wrong.
@@ -57,7 +57,7 @@ The basic process looks as follows::
     cmake .. \
         -DCMAKE_POLICY_DEFAULT_CMP0077=NEW \
         -DCMAKE_POLICY_DEFAULT_CMP0042=NEW \
-        -DCMAKE_OSX_ARCHITECTURES=x86_64 \
+        -DCMAKE_OSX_ARCHITECTURES=arm64 \
         -DCMAKE_C_COMPILER=gcc \
         -DCMAKE_CXX_COMPILER=g++ \
         -DCMAKE_Fortran_COMPILER=gfortran \
@@ -93,14 +93,9 @@ Install setup requirements::
 
     pip install -U cython wheel setuptools delocate
 
-Enter the cpymad folder, and build as follows::
+Enter the cpymad folder, and build as follows, passing additional link libraries::
 
     export CC=gcc
-
-    python setup.py build_ext
-
-If you have installed blas/lapack and MAD-X found it during the cmake step,
-you have to pass them as additional link libraries::
 
     python setup.py build_ext -lblas -llapack
 
