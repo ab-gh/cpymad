@@ -17,4 +17,5 @@ if available (see :ref:`installation`).
    installation/unix
    installation/windows
    installation/macos
+   installation/macos-apple-silicon
    installation/troubleshooting
